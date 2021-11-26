@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PhoneBook.Model;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -22,9 +23,23 @@ namespace PhoneBook.Pages
     /// </summary>
     public sealed partial class SearchContact : Page
     {
+        private ContactModel contactModel = new ContactModel();
         public SearchContact()
         {
             this.InitializeComponent();
+            this.Loaded += SearchContact_Loaded;
+        }
+
+        private void SearchContact_Loaded(object sender, RoutedEventArgs e)
+        {
+            MyListView.ItemsSource = contactModel.FindAll();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            var result = contactModel.SearchByKeyword(txtPhoneNumber.Text);
+
+            MyListView.ItemsSource = result;
         }
     }
 }

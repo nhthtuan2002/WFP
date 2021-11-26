@@ -1,4 +1,6 @@
-﻿using System;
+﻿using PhoneBook.Entities;
+using PhoneBook.Model;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -22,9 +24,41 @@ namespace PhoneBook.Pages
     /// </summary>
     public sealed partial class AddContacts : Page
     {
+        private ContactModel contactModel = new ContactModel();
         public AddContacts()
         {
             this.InitializeComponent();
+            this.Loaded += AddContacts_Loaded;
+        }
+
+        private void AddContacts_Loaded(object sender, RoutedEventArgs e)
+        {
+            DatabaseMigration.UpdateDatabase();
+        }
+
+        private async void Button_Click(object sender, RoutedEventArgs e)
+        {
+            var contact = new Contact()
+            {
+                phoneNumber = txtPhoneNumber.Text,
+                name = txtName.Text
+            };
+            var resutl = contactModel.Save(contact);
+            ContentDialog contentDialog = new ContentDialog();
+            if (resutl)
+            {
+                contentDialog.Title = "Actions success";
+                contentDialog.Content = "Contact Saved!";
+                contentDialog.PrimaryButtonText = "Ok";
+                await contentDialog.ShowAsync();
+            }
+            else
+            {
+                contentDialog.Title = "Actions fails";
+                contentDialog.Content = "Please try again!";
+                contentDialog.PrimaryButtonText = "Ok";
+                await contentDialog.ShowAsync();
+            }
         }
     }
 }

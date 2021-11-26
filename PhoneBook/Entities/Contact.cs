@@ -8,7 +8,7 @@ namespace PhoneBook.Entities
 {
     public class Contact
     {
-        public string Name { get; set; }
-        public int PhoneNumber { get; set; }
+        public string name { get; set; }
+        public string phoneNumber { get; set; }
     }
 }
